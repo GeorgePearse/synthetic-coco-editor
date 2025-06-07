@@ -45,6 +45,7 @@
   display: flex;
   position: relative;
   overflow: hidden;
+  height: calc(100vh - 64px);
 }
 
 .left-panel {
@@ -60,45 +61,35 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  background-color: #ecf0f1;
+  background-color: #1a1a1a;
 }
 
 .navigation-controls {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  z-index: 10;
+  padding: 1.5rem;
+  border-bottom: 1px solid #ecf0f1;
+  background-color: white;
 }
 
 .control-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .control-group label {
-  font-size: 0.8rem;
+  display: block;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #2c3e50;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
 }
 
 .nav-buttons {
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .nav-btn {
+  flex: 1;
   background-color: #3498db;
   color: white;
   border: none;
@@ -121,15 +112,14 @@
 .index-display {
   font-size: 0.9rem;
   color: #7f8c8d;
-  min-width: 80px;
   text-align: center;
 }
 
 .rotation-info {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: #2c3e50;
-  text-align: center;
-  min-width: 60px;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
 }
 
 .key-hint {
@@ -218,6 +208,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .no-object {
@@ -268,10 +259,21 @@
   color: #7f8c8d;
 }
 
-.rotation-hint {
+.rotation-controls {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid #ecf0f1;
+}
+
+.rotation-display {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+}
+
+.rotation-hint {
+  margin-top: 0.5rem;
 }
 
 .rotation-hint p {
@@ -289,17 +291,19 @@
   align-items: center;
   overflow: auto;
   padding: 2rem;
+  box-sizing: border-box;
 }
 
 .background-canvas {
-  max-width: 100%;
-  max-height: 100%;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
   cursor: crosshair;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   background: white;
   pointer-events: auto;
+  display: block;
+  object-fit: contain;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .no-background {

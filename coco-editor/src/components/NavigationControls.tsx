@@ -82,16 +82,6 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
           {totalForegrounds > 0 ? `${currentForegroundIndex + 1} / ${totalForegrounds}` : '0 / 0'}
         </div>
       </div>
-
-      <div className="control-group">
-        <label>Rotation</label>
-        <div className="rotation-info">
-          {editorState.currentRotation}°
-        </div>
-        <div className="key-hint">
-          F: clockwise, D: counter-clockwise
-        </div>
-      </div>
     </div>
   );
 };

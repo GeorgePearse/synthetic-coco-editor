@@ -62,10 +62,6 @@ const ForegroundPanel: React.FC<ForegroundPanelProps> = ({
       </div>
       <div className="object-info">
         <div className="info-row">
-          <span>Rotation:</span>
-          <span>{rotation}°</span>
-        </div>
-        <div className="info-row">
           <span>Size:</span>
           <span>{Math.round(foregroundObject.bbox[2])} × {Math.round(foregroundObject.bbox[3])}</span>
         </div>
@@ -73,9 +69,14 @@ const ForegroundPanel: React.FC<ForegroundPanelProps> = ({
           <span>Area:</span>
           <span>{Math.round(foregroundObject.area)}</span>
         </div>
-        <div className="rotation-hint">
-          <p>Hold 'F' to rotate clockwise</p>
-          <p>Hold 'D' to rotate counter-clockwise</p>
+        <div className="rotation-controls">
+          <div className="rotation-display">
+            <span>Rotation: {rotation}°</span>
+          </div>
+          <div className="rotation-hint">
+            <p>Hold 'F' to rotate clockwise</p>
+            <p>Hold 'D' to rotate counter-clockwise</p>
+          </div>
         </div>
       </div>
     </div>

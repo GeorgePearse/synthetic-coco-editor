@@ -64,6 +64,11 @@ function App() {
                 })
               }
             />
+            <NavigationControls 
+              editorState={editorState}
+              updateEditorState={updateEditorState}
+              currentForegroundObjects={currentForegroundObjects}
+            />
             <ForegroundPanel 
               foregroundObject={currentForegroundObject}
               rotation={editorState.currentRotation}
@@ -82,12 +87,6 @@ function App() {
               updateEditorState={updateEditorState}
             />
           </div>
-
-          <NavigationControls 
-            editorState={editorState}
-            updateEditorState={updateEditorState}
-            currentForegroundObjects={currentForegroundObjects}
-          />
         </div>
       )}
     </div>
