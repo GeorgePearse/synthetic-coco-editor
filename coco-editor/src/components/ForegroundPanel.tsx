@@ -20,12 +20,13 @@ const ForegroundPanel: React.FC<ForegroundPanelProps> = ({
     if (!ctx) return;
 
     const img = foregroundObject.image;
+    const [x, y, width, height] = foregroundObject.bbox;
     const maxSize = 250;
     
-    // Calculate scaled dimensions
-    const scale = Math.min(maxSize / img.width, maxSize / img.height);
-    const scaledWidth = img.width * scale;
-    const scaledHeight = img.height * scale;
+    // Calculate scaled dimensions based on bbox
+    const scale = Math.min(maxSize / width, maxSize / height);
+    const scaledWidth = width * scale;
+    const scaledHeight = height * scale;
     
     canvas.width = maxSize;
     canvas.height = maxSize;
@@ -37,7 +38,9 @@ const ForegroundPanel: React.FC<ForegroundPanelProps> = ({
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate((rotation * Math.PI) / 180);
-    ctx.drawImage(img, -scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight);
+    
+    // Draw only the cropped part of the image
+    ctx.drawImage(img, x, y, width, height, -scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight);
     ctx.restore();
   }, [foregroundObject, rotation]);
 

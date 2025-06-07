@@ -43,32 +43,53 @@ const ExportButton: React.FC<ExportButtonProps> = ({ editorState }) => {
           ctx.drawImage(imageElement, 0, 0);
 
           // Draw placed objects on this image
-          const placedAnnotations = editorState.newAnnotations.filter(
-            ann => ann.image_id === imageId
+          const placedObjectsForImage = editorState.placedObjects.filter(
+            obj => obj.annotation.image_id === imageId
           );
 
-          for (const annotation of placedAnnotations) {
-            // Find the original foreground object
-            const category = editorState.dataset!.categories.find(
-              cat => cat.id === annotation.category_id
-            );
-            if (!category) continue;
-
-            const foregroundObjects = editorState.foregroundObjects.get(annotation.category_id);
-            if (!foregroundObjects || foregroundObjects.length === 0) continue;
-
-            // For simplicity, use the first object of this category
-            // In a full implementation, you'd track which specific object was placed
-            const foregroundObject = foregroundObjects[0];
+          for (const placedObj of placedObjectsForImage) {
+            ctx.save();
             
-            const [x, y, width, height] = annotation.bbox;
+            // Create masked object from segmentation
+            const maskCanvas = document.createElement('canvas');
+            const [objX, objY, objWidth, objHeight] = placedObj.foregroundObject.bbox;
+            maskCanvas.width = objWidth;
+            maskCanvas.height = objHeight;
+            const maskCtx = maskCanvas.getContext('2d');
             
-            // Draw the object (simplified - no rotation applied here)
-            ctx.drawImage(
-              foregroundObject.image,
-              x + width / 2 - foregroundObject.image.width / 2,
-              y + height / 2 - foregroundObject.image.height / 2
-            );
+            if (maskCtx) {
+              // Draw the image onto the mask canvas
+              maskCtx.drawImage(placedObj.foregroundObject.image, -objX, -objY);
+              
+              // Create clipping mask from segmentation
+              maskCtx.globalCompositeOperation = 'destination-in';
+              maskCtx.fillStyle = 'black';
+              maskCtx.beginPath();
+              
+              placedObj.foregroundObject.segmentation.forEach(polygon => {
+                for (let i = 0; i < polygon.length; i += 2) {
+                  const px = polygon[i] - objX;
+                  const py = polygon[i + 1] - objY;
+                  if (i === 0) {
+                    maskCtx.moveTo(px, py);
+                  } else {
+                    maskCtx.lineTo(px, py);
+                  }
+                }
+                maskCtx.closePath();
+              });
+              
+              maskCtx.fill();
+              
+              // Apply rotation and position
+              ctx.translate(placedObj.x, placedObj.y);
+              ctx.rotate((placedObj.rotation * Math.PI) / 180);
+              
+              // Draw the masked object centered at placement position
+              ctx.drawImage(maskCanvas, -maskCanvas.width / 2, -maskCanvas.height / 2);
+            }
+            
+            ctx.restore();
           }
 
           // Convert canvas to blob and add to zip
@@ -92,7 +113,7 @@ const ExportButton: React.FC<ExportButtonProps> = ({ editorState }) => {
     }
   };
 
-  const hasChanges = editorState.newAnnotations.length > 0;
+  const hasChanges = editorState.newAnnotations.length > 0 || editorState.placedObjects.length > 0;
 
   return (
     <button

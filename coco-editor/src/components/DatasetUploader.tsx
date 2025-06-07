@@ -51,17 +51,31 @@ const DatasetUploader: React.FC<DatasetUploaderProps> = ({ onDatasetLoaded }) =>
           croppedImage.onerror = reject;
           croppedImage.src = croppedDataUrl;
         });
+        
+        // Store the original full image as well for drawing
+        croppedImage.dataset.fullImage = imageElement.src;
 
         const foregroundObject: ForegroundObject = {
           id: `obj_${annotation.id}`,
           category_id: annotation.category_id,
-          image: croppedImage,
+          image: imageElement, // Use the full image instead of cropped
           mask: null, // TODO: Extract mask from segmentation
           bbox: annotation.bbox,
-          segmentation: Array.isArray(annotation.segmentation) ? annotation.segmentation : [],
+          segmentation: Array.isArray(annotation.segmentation) ? 
+            (annotation.segmentation as number[][]) : 
+            [],
           area: annotation.area,
           originalAnnotation: annotation,
         };
+        
+        console.log('Created foreground object:', {
+          id: foregroundObject.id,
+          category_id: foregroundObject.category_id,
+          hasImage: !!foregroundObject.image,
+          imageComplete: foregroundObject.image.complete,
+          imageWidth: foregroundObject.image.width,
+          imageHeight: foregroundObject.image.height
+        });
 
         const categoryObjects = foregroundObjects.get(annotation.category_id) || [];
         categoryObjects.push(foregroundObject);
@@ -155,6 +169,7 @@ const DatasetUploader: React.FC<DatasetUploaderProps> = ({ onDatasetLoaded }) =>
         currentForegroundIndex: 0,
         currentRotation: 0,
         newAnnotations: [],
+        placedObjects: [],
         nextAnnotationId: maxAnnotationId + 1,
       });
 
@@ -172,7 +187,7 @@ const DatasetUploader: React.FC<DatasetUploaderProps> = ({ onDatasetLoaded }) =>
   const loadLocalDataset = async () => {
     try {
       // Load the local tiny COCO dataset
-      const response = await fetch('/tiny_coco_dataset/tiny_coco/annotations/instances_train2017.json');
+      const response = await fetch('/tiny_coco/annotations/instances_train2017.json');
       if (!response.ok) throw new Error('Failed to load local dataset annotations');
       
       const dataset: COCODataset = await response.json();
@@ -183,7 +198,7 @@ const DatasetUploader: React.FC<DatasetUploaderProps> = ({ onDatasetLoaded }) =>
       
       for (const imageInfo of dataset.images) {
         try {
-          const imageResponse = await fetch(`/tiny_coco_dataset/tiny_coco/train2017/${imageInfo.file_name}`);
+          const imageResponse = await fetch(`/tiny_coco/train2017/${imageInfo.file_name}`);
           if (imageResponse.ok) {
             const blob = await imageResponse.blob();
             imageFiles.set(imageInfo.file_name, blob);

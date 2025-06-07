@@ -59,6 +59,14 @@ export interface ForegroundObject {
   originalAnnotation: COCOAnnotation;
 }
 
+export interface PlacedObject {
+  foregroundObject: ForegroundObject;
+  x: number;
+  y: number;
+  rotation: number;
+  annotation: COCOAnnotation;
+}
+
 export interface EditorState {
   dataset: COCODataset | null;
   backgroundImages: Map<number, HTMLImageElement>;
@@ -68,13 +76,6 @@ export interface EditorState {
   currentForegroundIndex: number;
   currentRotation: number;
   newAnnotations: COCOAnnotation[];
+  placedObjects: PlacedObject[];
   nextAnnotationId: number;
-}
-
-export interface PlacedObject {
-  foregroundObject: ForegroundObject;
-  x: number;
-  y: number;
-  rotation: number;
-  annotation: COCOAnnotation;
 }

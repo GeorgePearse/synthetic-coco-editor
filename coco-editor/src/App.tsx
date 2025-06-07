@@ -18,6 +18,7 @@ function App() {
     currentForegroundIndex: 0,
     currentRotation: 0,
     newAnnotations: [],
+    placedObjects: [],
     nextAnnotationId: 1,
   });
 
@@ -77,7 +78,6 @@ function App() {
                 undefined
               }
               foregroundObject={currentForegroundObject}
-              rotation={editorState.currentRotation}
               editorState={editorState}
               updateEditorState={updateEditorState}
             />
