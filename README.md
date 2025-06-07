@@ -1,5 +1,7 @@
 # COCO Dataset Editor
 
+test
+
 A web-based tool for creating and editing COCO format datasets with an intuitive visual interface. This editor allows you to place object instances from one image onto background images, automatically generating COCO-compliant annotations.
 
 ![COCO Dataset Editor Interface](docs/images/coco-editor-screenshot.png)
