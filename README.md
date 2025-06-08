@@ -4,7 +4,7 @@ test
 
 A web-based tool for creating and editing COCO format datasets with an intuitive visual interface. This editor allows you to place object instances from one image onto background images, automatically generating COCO-compliant annotations.
 
-<img width="1222" alt="image" src="https://github.com/user-attachments/assets/02626ddf-0969-4c9d-a88a-68829da087ce" />
+<img width="1244" alt="image" src="https://github.com/user-attachments/assets/cf6cd788-fbe4-428b-8e01-929c8aafd59c" />
 
 
 ## Features
